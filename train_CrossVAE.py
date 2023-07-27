@@ -33,7 +33,7 @@ def train_epoch(model, train_loader, optimizer, epoch, args):
     model_lh.train()
     model_rh.train()
     print("Annealing Factor: ", args.annealing_factor)
-    if args.log_in_comet:
+    if args.log_comet:
         args.experiment.log_metric(
             "Annealing Factor", args.annealing_factor, epoch=epoch, step=epoch
         )
@@ -86,7 +86,7 @@ def train_epoch(model, train_loader, optimizer, epoch, args):
 
         args.annealing_factor = args.annealing()
 
-    if args.log_in_comet:
+    if args.log_comet:
         args.experiment.log_metric(
             "train_loss_lh" + args.name_roi, loss_lh.item(), epoch=epoch, step=epoch
         )
@@ -135,7 +135,7 @@ def eval_epoch(model, val_loader, epoch, args):
     val_loss /= len(val_loader.dataset)
     print("\nValidation set: Average loss: {:.4f}\n".format(val_loss))
 
-    if args.log_in_comet:
+    if args.log_comet:
         args.experiment.log_metric("val_loss" + args.name_roi, val_loss, epoch=epoch)
 
     fmri_lh_val_pred = np.concatenate(predictions_lh)
@@ -165,7 +165,7 @@ def eval_epoch(model, val_loader, epoch, args):
         "rh_correlation: {:.4f} ".format(rh_median_correlation),
     )
 
-    if args.log_in_comet:
+    if args.log_comet:
         args.experiment.log_metric(
             "val_corr_lh (mean)" + args.name_roi, lh_mean_correlation, epoch=epoch
         )
@@ -388,7 +388,7 @@ def train_loop(args):
             last_save = 0
             best_rh_epoch = epoch
 
-        if args.log_in_comet:
+        if args.log_comet:
             args.experiment.log_metric(
                 "best_lh_corr", best_corr_mean_lh, epoch=epoch, step=epoch
             )
@@ -430,7 +430,7 @@ def train_loop(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--log_in_comet", action="store_true", help="Log in comet.ml.")
+    parser.add_argument("--log_comet", action="store_true", help="Log in comet.ml.")
     parser.add_argument("--tag", type=str, default="default", help="Tag for comet.ml.")
     parser.add_argument("--num_workers", type=int, default=32, help="number of workers")
     parser.add_argument("--device", type=str, default="cuda", help="Computing device.")
@@ -500,7 +500,7 @@ if __name__ == "__main__":
 
     args.model_dir = os.path.join(args.model_dir, f"subj0{args.subj}")
 
-    if args.log_in_comet:
+    if args.log_comet:
         experiment = Experiment(
             api_key="URVDBfbqnTFso6fkonsUc20tW",
             project_name="algonauts23",
