@@ -39,7 +39,7 @@ All the experimenets and hyperparameter tuning, and decisions in changing the ar
 | Models | Correlation|
 |--------|--------------|
 | ResNet | 33.3 |
-| LeNet | 47.7 |
+| LeNet | 47.6 |
 | CrossVAE | 47.2 |
 
 
